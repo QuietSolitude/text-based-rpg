@@ -1,5 +1,5 @@
 #include "Pillow.h"
 
-Pillow::Pillow() :Item("’ÌÕ∑", 2, 2) {
+Pillow::Pillow() :Item("’ÌÕ∑", 2, 1) {
 
 }
