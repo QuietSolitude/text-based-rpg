@@ -1,6 +1,6 @@
-#include "Bed.h"
+ï»¿#include "Bed.h"
 
-Bed::Bed() :Item("´²", 1, 1)
+Bed::Bed() :Item("åºŠ", 1, 1)
 {
 
 }
