@@ -3,12 +3,13 @@
 using std::cout;
 using std::endl;
 
-Item::Item(string name, int id)
+Item::Item(string name, int id, int locationID)
 {
-	if (!name.empty() && id >= 0)
+	if (!name.empty() && id >= 0 && locationID >= 0 )
 	{
 		this->name = name;
 		this->id = id;
+		this->locationID = locationID;
 	}
 	else
 	{
