@@ -7,6 +7,7 @@ class Item
 protected:
 	string name;
 	int id;
+	int locationID;
 
 public:
 	virtual void displayMessage() = 0;
