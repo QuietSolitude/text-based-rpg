@@ -1,5 +1,5 @@
-#include "Pillow.h"
+﻿#include "Pillow.h"
 
-Pillow::Pillow() :Item("��ͷ", 2, 1) {
+Pillow::Pillow() :Item("枕头", 2, 1) {
 
 }
