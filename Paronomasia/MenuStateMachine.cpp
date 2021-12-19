@@ -23,7 +23,7 @@ Menu MenuStateMachine::handleTopLevelMenu() {
 
 	switch (input) {
 	case 1:
-		cout << "带完成功能";
+		return MENU_INSPECT;
 		break;
 	case 2:
 		cout << "待完成功能";
@@ -58,15 +58,32 @@ Menu MenuStateMachine::handleMoveMenu() {
 	return MENU_TOP_LEVEL;
 }
 
-Menu MenuStateMachine::displayItems()
+//Menu MenuStateMachine::displayItems()
+//{
+//	vector<Item>::size_type sz = gameData->items.size();
+//}
+
+Menu MenuStateMachine::handleInspectMenu()
 {
 	vector<Item>::size_type sz = gameData->items.size();
+	
+	if (gameData->items[0].locationID == 1)
+	{
+		cout << gameData->locations[1].name << " 里你可以使用的所有物品：" << endl;
+		for (unsigned i = 0; i < sz; i++) 
+		{
+			cout << i + 1 << ". " << gameData->items[i].name << endl;
+		}
+	}
+	else if(gameData->items[0].locationID == 2)
+	{
+		cout << gameData->locations[2].name << " 里你可以使用的所有物品: " << endl;
+		for (unsigned i = 0; i < sz; i++)
+		{
+			cout << i + 1 << ". " << gameData->items[i].name << endl;
+		}
+	}
 }
-
-//Menu MenuStateMachine::handleInspectMenu()
-//{
-//	
-//}
 
 void MenuStateMachine::Run() {
 
@@ -81,6 +98,8 @@ void MenuStateMachine::Run() {
 		case MENU_MOVE:
 			currentMenu = handleMoveMenu();
 			break;
+		case MENU_INSPECT:
+			currentMenu = handleInspectMenu();
 		default:
 			cout << "暂未开放新界面";
 
