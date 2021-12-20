@@ -66,23 +66,20 @@ Menu MenuStateMachine::handleMoveMenu() {
 Menu MenuStateMachine::handleInspectMenu()
 {
 	vector<Item>::size_type sz = gameData->items.size();
-	
-	if (gameData->items[0].locationID == 1)
+	cout << "你所在地的所有物品：" << endl;
+	int playerLocation = gameData->player.locationID;
+	for (unsigned i = 0; i < sz; i++)
 	{
-		cout << gameData->locations[1].name << " 里你可以使用的所有物品：" << endl;
-		for (unsigned i = 0; i < sz; i++) 
+		if (gameData->items[i].locationID == playerLocation)
 		{
 			cout << i + 1 << ". " << gameData->items[i].name << endl;
 		}
 	}
-	else if(gameData->items[0].locationID == 2)
-	{
-		cout << gameData->locations[2].name << " 里你可以使用的所有物品: " << endl;
-		for (unsigned i = 0; i < sz; i++)
-		{
-			cout << i + 1 << ". " << gameData->items[i].name << endl;
-		}
-	}
+	int backMenu;
+	cout << "请输入2返回" << endl;
+	cin >> backMenu;
+
+	return MENU_TOP_LEVEL;
 }
 
 void MenuStateMachine::Run() {
