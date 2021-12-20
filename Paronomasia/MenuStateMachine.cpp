@@ -68,16 +68,20 @@ Menu MenuStateMachine::handleInspectMenu()
 	vector<Item>::size_type sz = gameData->items.size();
 	cout << "你所在地的所有物品：" << endl;
 	int playerLocation = gameData->player.locationID;
+	int index = 1;
 	for (unsigned i = 0; i < sz; i++)
 	{
 		if (gameData->items[i].locationID == playerLocation)
 		{
-			cout << i + 1 << ". " << gameData->items[i].name << endl;
+			cout << index << ". " << gameData->items[i].name << endl;
+			index++;
 		}
 	}
-	int backMenu;
-	cout << "请输入2返回" << endl;
-	cin >> backMenu;
+	int itemNumberOfBack = gameData->items.size() + 1;
+	cout << itemNumberOfBack << ". 返回" << endl;
+	cout << "请选择：";
+	int input;
+	cin >> input;
 
 	return MENU_TOP_LEVEL;
 }
