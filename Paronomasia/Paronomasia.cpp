@@ -1,4 +1,4 @@
-// Paronomasia.cpp : This file contains the 'main' function. Program execution begins and ends there.
+﻿// Paronomasia.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
 #include <iostream>
@@ -10,6 +10,8 @@
 #include "Location.h"
 #include "Bedroom.h"
 #include "Washroom.h"
+#include "Bed.h"
+#include "Pillow.h"
 
 
 int main()
@@ -21,6 +23,10 @@ int main()
     GameData gameData = GameData(player);
     gameData.locations.push_back(bedroom);
     gameData.locations.push_back(washroom);
+    Bed bed = Bed();
+    Pillow pillow = Pillow();
+    gameData.items.push_back(bed);
+    gameData.items.push_back(pillow);
     InteractionService interactionService = InteractionService(&gameData);
     MenuStateMachine menuStateMachine = MenuStateMachine(&interactionService, &gameData);
     menuStateMachine.Run();
