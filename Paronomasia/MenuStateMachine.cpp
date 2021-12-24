@@ -14,21 +14,21 @@ MenuStateMachine::MenuStateMachine(InteractionService* interaction, GameData* ga
 }
 
 Menu MenuStateMachine::handleTopLevelMenu() {
-	int input;
-	cout << "你想要做什么？" << endl;
 
-	cout << "1. 查看" <<endl <<  "2. 物品" << endl << "3. 移动" << endl;
-	cout << "请选择：";
-	cin >> input;
+	vector<string> choiceString;
+	choiceString.push_back("查看");
+	choiceString.push_back("物品");
+	choiceString.push_back("移动");
+	int input = interaction->PrintChoiceList("你想要做什么？", choiceString, true);
 
 	switch (input) {
-	case 1:
+	case 0:
 		return MENU_INSPECT;
 		break;
-	case 2:
+	case 1:
 		cout << "待完成功能";
 		break;
-	case 3:
+	case 2:
 		return MENU_MOVE;
 
 	default:
@@ -46,11 +46,9 @@ Menu MenuStateMachine::handleMoveMenu() {
 	}
 	
 	int itemNumberOfBack = interaction->PrintChoiceList("你想要移动到哪里呢？",locationString);
-	int input;
-	cin >> input;
-	if (input != itemNumberOfBack)
+	if (itemNumberOfBack >= 0)
 	{
-		interaction->MoveTo(gameData->locations[input - 1]);
+		interaction->MoveTo(gameData->locations[itemNumberOfBack]);
 	}
 	
 	return MENU_TOP_LEVEL;
@@ -65,16 +63,20 @@ Menu MenuStateMachine::handleInspectMenu()
 {
 	vector<Item>::size_type sz = gameData->items.size();
 	vector<string> itemsString ;
+	vector<Item> items;
 	int playerLocation = gameData->player.locationID;
-	int index = 1;
 	for (unsigned i = 0; i < sz; i++)
 	{
-		itemsString.push_back(gameData->items[i].name);
+		if (playerLocation == gameData->items[i].locationID) {
+			itemsString.push_back(gameData->items[i].name);
+			items.push_back(gameData->items[i]);
+		}
 	}
-	int itemNumberOfBack = interaction->PrintChoiceList("你所在地的所有物品：", itemsString);
-	int input;
-	cin >> input;
-
+	int itemIndex = interaction->PrintChoiceList("你想要查看什么？", itemsString);
+	if (itemIndex >= 0)
+	{
+		interaction->PrintItemsMessage(items[itemIndex]);
+	}
 	return MENU_TOP_LEVEL;
 }
 
@@ -93,6 +95,7 @@ void MenuStateMachine::Run() {
 			break;
 		case MENU_INSPECT:
 			currentMenu = handleInspectMenu();
+			break;
 		default:
 			cout << "暂未开放新界面";
 

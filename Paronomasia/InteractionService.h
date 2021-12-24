@@ -10,7 +10,7 @@ private:
 public:
 	InteractionService(GameData* gameData);
 	void MoveTo(Location location);
-	int PrintChoiceList(string prompt, vector<string> choices);
-	
+	int PrintChoiceList(string prompt, vector<string> choices , bool topLevel = false);
+	void PrintItemsMessage(Item items);
 };
 
