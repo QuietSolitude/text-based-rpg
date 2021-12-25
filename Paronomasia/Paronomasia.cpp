@@ -16,7 +16,6 @@
 
 int main()
 {
-    std::cout << "Hello World!\n";
     Bedroom bedroom = Bedroom();
     Player player = Player(bedroom.id);
     Washroom washroom = Washroom();
@@ -27,8 +26,11 @@ int main()
     Pillow pillow = Pillow();
     gameData.items.push_back(bed);
     gameData.items.push_back(pillow);
+    Item mirror = Item("镜子", 3, washroom.id,"这是镜子");
+    gameData.items.push_back(mirror);
     InteractionService interactionService = InteractionService(&gameData);
     MenuStateMachine menuStateMachine = MenuStateMachine(&interactionService, &gameData);
+    cout << bedroom.introduction << endl; 
     menuStateMachine.Run();
 
 

@@ -19,7 +19,7 @@ Menu MenuStateMachine::handleTopLevelMenu() {
 	choiceString.push_back("查看");
 	choiceString.push_back("物品");
 	choiceString.push_back("移动");
-	int input = interaction->PrintChoiceList("你想要做什么？", choiceString, true);
+	int input = printChoiceList("你想要做什么？", choiceString, true);
 
 	switch (input) {
 	case 0:
@@ -45,7 +45,7 @@ Menu MenuStateMachine::handleMoveMenu() {
 		locationString.push_back(gameData->locations[i].name);
 	}
 	
-	int itemNumberOfBack = interaction->PrintChoiceList("你想要移动到哪里呢？",locationString);
+	int itemNumberOfBack = printChoiceList("你想要移动到哪里呢？",locationString);
 	if (itemNumberOfBack >= 0)
 	{
 		interaction->MoveTo(gameData->locations[itemNumberOfBack]);
@@ -72,12 +72,52 @@ Menu MenuStateMachine::handleInspectMenu()
 			items.push_back(gameData->items[i]);
 		}
 	}
-	int itemIndex = interaction->PrintChoiceList("你想要查看什么？", itemsString);
+	int itemIndex = printChoiceList("你想要查看什么？", itemsString);
 	if (itemIndex >= 0)
 	{
-		interaction->PrintItemsMessage(items[itemIndex]);
+		printItemsMessage(items[itemIndex]);
 	}
 	return MENU_TOP_LEVEL;
+}
+
+int MenuStateMachine::printChoiceList(string prompt, vector<string> choices, bool topLevel) {
+	cout << endl;
+	cout << prompt << endl;
+	if (!topLevel) {
+		cout << "0. 返回" << endl;
+	}
+
+	for (unsigned i = 0; i < choices.size(); i++)
+	{
+		cout << i + 1 << ". " << choices[i] << endl;
+	}
+	cout << "请选择：";
+	int input;
+	cin >> input;
+	isDigit(to_string(input));
+	return input - 1;
+}
+
+int MenuStateMachine::isDigit(string str)
+{
+	string inputIsDigit;
+
+	for (unsigned i = 0; i < str.length(); i++)
+	{
+		if (!isdigit(str[i])) {
+			cout << "请输入选项的数字：" << endl;
+			cout << "请选择：";
+			cin >> inputIsDigit;
+			isDigit(inputIsDigit);
+		}
+		else {
+			return 0;
+		}
+	}
+}
+
+void MenuStateMachine::printItemsMessage(Item items) {
+	cout << items.message << endl;
 }
 
 void MenuStateMachine::Run() {

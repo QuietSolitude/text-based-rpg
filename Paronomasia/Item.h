@@ -4,13 +4,17 @@ using std::string;
 
 class Item
 {
-protected:
-	string name;
-	int id;
-	int locationID;
+//protected:
+//	string name;
+//	int id;
+	
 
 public:
-	virtual void displayMessage() = 0;
-	Item(string name, int id, int locationID);
+	int locationID;
+	//virtual void displayMessage()=0;
+	string name;
+	int id;
+	string message;
+	Item(string name, int id, int locationID, string message);
 };
 
