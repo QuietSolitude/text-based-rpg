@@ -20,7 +20,7 @@ Menu MenuStateMachine::handleTopLevelMenu() {
 	choiceString.push_back("物品");
 	choiceString.push_back("移动");
 	int input = printChoiceList("你想要做什么？", choiceString, true);
-
+	
 	switch (input) {
 	case 0:
 		return MENU_INSPECT;
@@ -30,9 +30,10 @@ Menu MenuStateMachine::handleTopLevelMenu() {
 		break;
 	case 2:
 		return MENU_MOVE;
+		break;
 
 	default:
-		cout << "暂未开放更多功能，请输入提示选项的值";
+		cout << "请更具选项的顺序输入数字序列";
 	}
 }
 
@@ -46,11 +47,10 @@ Menu MenuStateMachine::handleMoveMenu() {
 	}
 	
 	int itemNumberOfBack = printChoiceList("你想要移动到哪里呢？",locationString);
-	if (itemNumberOfBack >= 0)
-	{
+
+	if (itemNumberOfBack >= 0){
 		interaction->MoveTo(gameData->locations[itemNumberOfBack]);
 	}
-	
 	return MENU_TOP_LEVEL;
 }
 
@@ -94,27 +94,33 @@ int MenuStateMachine::printChoiceList(string prompt, vector<string> choices, boo
 	cout << "请选择：";
 	int input;
 	cin >> input;
-	isDigit(to_string(input));
+	//if (cin.fail())
+	//{
+	//	cout << "请输入序列号：" << endl;
+	//	cin.clear();
+	//	
+	//	return 0;
+	//}
 	return input - 1;
 }
 
-int MenuStateMachine::isDigit(string str)
-{
-	string inputIsDigit;
-
-	for (unsigned i = 0; i < str.length(); i++)
-	{
-		if (!isdigit(str[i])) {
-			cout << "请输入选项的数字：" << endl;
-			cout << "请选择：";
-			cin >> inputIsDigit;
-			isDigit(inputIsDigit);
-		}
-		else {
-			return 0;
-		}
-	}
-}
+//int MenuStateMachine::isDigit(string str)
+//{
+//	string inputIsDigit;
+//
+//	for (unsigned i = 0; i < str.length(); i++)
+//	{
+//		if (!isdigit(str[i])) {
+//			cout << "请输入选项的数字：" << endl;
+//			cout << "请选择：";
+//			cin >> inputIsDigit;
+//			isDigit(inputIsDigit);
+//		}
+//		else {
+//			return 0;
+//		}
+//	}
+//}
 
 void MenuStateMachine::printItemsMessage(Item items) {
 	cout << items.message << endl;
