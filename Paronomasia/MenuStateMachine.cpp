@@ -76,7 +76,12 @@ Menu MenuStateMachine::handleInspectMenu()
 	if (itemIndex >= 0)
 	{
 		printItemsMessage(items[itemIndex]);
+		if (items[itemIndex].containsItem)
+		{
+			interaction->AddcontainsItem(items[itemIndex]);
+		}
 	}
+	
 	return MENU_TOP_LEVEL;
 }
 
