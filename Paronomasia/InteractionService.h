@@ -11,7 +11,7 @@ private:
 public:
 	InteractionService(GameData* gameData);
 	void MoveTo(Location location);
-	void AddcontainsItem(Item addItem);
+	void MoveContainedItemsToBackpack(Item& addItem); 
 	
 };
 

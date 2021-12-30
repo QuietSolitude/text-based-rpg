@@ -10,7 +10,7 @@ MenuStateMachine::MenuStateMachine(InteractionService* interaction, GameData* ga
 	this->currentMenu = MENU_TOP_LEVEL;
 	this->keepRunning = true;
 	this->gameData = gameData;
-	
+
 }
 
 Menu MenuStateMachine::handleTopLevelMenu() {
@@ -20,7 +20,7 @@ Menu MenuStateMachine::handleTopLevelMenu() {
 	choiceString.push_back("物品");
 	choiceString.push_back("移动");
 	int input = printChoiceList("你想要做什么？", choiceString, true);
-	
+
 	switch (input) {
 	case 0:
 		return MENU_INSPECT;
@@ -45,10 +45,10 @@ Menu MenuStateMachine::handleMoveMenu() {
 	{
 		locationString.push_back(gameData->locations[i].name);
 	}
-	
-	int itemNumberOfBack = printChoiceList("你想要移动到哪里呢？",locationString);
 
-	if (itemNumberOfBack >= 0){
+	int itemNumberOfBack = printChoiceList("你想要移动到哪里呢？", locationString);
+
+	if (itemNumberOfBack >= 0) {
 		interaction->MoveTo(gameData->locations[itemNumberOfBack]);
 	}
 	return MENU_TOP_LEVEL;
@@ -62,26 +62,52 @@ Menu MenuStateMachine::handleMoveMenu() {
 Menu MenuStateMachine::handleInspectMenu()
 {
 	vector<Item>::size_type sz = gameData->items.size();
-	vector<string> itemsString ;
-	vector<Item> items;
+	vector<string> itemsString;
+	vector<Item*> items;
 	int playerLocation = gameData->player.locationID;
 	for (unsigned i = 0; i < sz; i++)
 	{
 		if (playerLocation == gameData->items[i].locationID) {
 			itemsString.push_back(gameData->items[i].name);
-			items.push_back(gameData->items[i]);
+			items.push_back(&(gameData->items[i]));
 		}
 	}
+
 	int itemIndex = printChoiceList("你想要查看什么？", itemsString);
 	if (itemIndex >= 0)
 	{
-		printItemsMessage(items[itemIndex]);
-		if (items[itemIndex].containsItem)
+		Item* item = items[itemIndex];
+		printItemsMessage(*item);
+		if (item->containsItem)
 		{
-			interaction->AddcontainsItem(items[itemIndex]);
+			if (item->containedItems.size() > 0)
+			{
+				cout << endl << "你把";
+			}
+
+			for (unsigned i = 0; i < item->containedItems.size(); i++)
+			{
+				cout << item->containedItems[i].name;
+				if (i == item->containedItems.size() - 1)
+				{
+					cout << "放到了背包里" << endl;
+				}
+				else if (i == item->containedItems.size() - 2)
+				{
+					cout << "和";
+				}
+				else
+				{
+					cout << "、";
+				}
+			}
+
+			interaction->MoveContainedItemsToBackpack(*item);
+
 		}
+
 	}
-	
+
 	return MENU_TOP_LEVEL;
 }
 
@@ -133,7 +159,7 @@ void MenuStateMachine::printItemsMessage(Item items) {
 
 void MenuStateMachine::Run() {
 
-	while(keepRunning)
+	while (keepRunning)
 	{
 		switch (currentMenu)
 		{
