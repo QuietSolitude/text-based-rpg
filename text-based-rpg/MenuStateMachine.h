@@ -13,7 +13,6 @@ class MenuStateMachine
 {
 private:
 	Menu currentMenu;
-	bool keepRunning;
 	InteractionService* interaction;
 	GameData* gameData;
 public:

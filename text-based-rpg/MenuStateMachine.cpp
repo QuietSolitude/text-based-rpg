@@ -4,13 +4,11 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-MenuStateMachine::MenuStateMachine(InteractionService* interaction, GameData* gameData)
+MenuStateMachine::MenuStateMachine(InteractionService* interaction, GameData* gameData):
+	interaction(interaction),
+	currentMenu(Menu::MENU_TOP_LEVEL),
+	gameData(gameData)
 {
-	this->interaction = interaction;
-	this->currentMenu = MENU_TOP_LEVEL;
-	this->keepRunning = true;
-	this->gameData = gameData;
-
 }
 
 Menu MenuStateMachine::handleTopLevelMenu()
@@ -70,39 +68,43 @@ Menu MenuStateMachine::handleInspectMenu()
 	}
 
 	int itemIndex = printChoiceList("你想要查看什么？", itemsString);
-	if (itemIndex >= 0)
+	
+	if (itemIndex < 0)
 	{
-		Item* item = items[itemIndex];
-		printItemsMessage(*item);
-		if (item->containsItem)
+		return MENU_TOP_LEVEL;
+	}
+
+	Item* item = items[itemIndex];
+	printItemsMessage(*item);
+
+	if (item->containsItem)
+	{
+		if (item->containedItems.size() > 0)
 		{
-			if (item->containedItems.size() > 0)
-			{
-				cout << endl << "你把";
-			}
-
-			for (unsigned i = 0; i < item->containedItems.size(); i++)
-			{
-				cout << item->containedItems[i].name;
-				if (i == item->containedItems.size() - 1)
-				{
-					cout << "收了起来" << endl;
-				}
-				else if (i == item->containedItems.size() - 2)
-				{
-					cout << "和";
-				}
-				else
-				{
-					cout << "、";
-				}
-			}
-
-			interaction->moveContainedItemsToBackpack(*item);
-
+			cout << endl << "你把";
 		}
 
+		for (unsigned i = 0; i < item->containedItems.size(); i++)
+		{
+			cout << item->containedItems[i].name;
+			if (i == item->containedItems.size() - 1)
+			{
+				cout << "收了起来" << endl;
+			}
+			else if (i == item->containedItems.size() - 2)
+			{
+				cout << "和";
+			}
+			else
+			{
+				cout << "、";
+			}
+		}
+
+		interaction->moveContainedItemsToBackpack(*item);
 	}
+
+	interaction->afterInspectItem(*item);
 
 	return MENU_TOP_LEVEL;
 }
@@ -157,41 +159,17 @@ int MenuStateMachine::printChoiceList(string prompt, vector<string> choices, boo
 	cout << "请选择：";
 	int input;
 	cin >> input;
-	//if (cin.fail())
-	//{
-	//	cout << "请输入序列号：" << endl;
-	//	cin.clear();
-	//	
-	//	return 0;
-	//}
 	return input - 1;
 }
 
-//int MenuStateMachine::isDigit(string str)
-//{
-//	string inputIsDigit;
-//
-//	for (unsigned i = 0; i < str.length(); i++)
-//	{
-//		if (!isdigit(str[i])) {
-//			cout << "请输入选项的数字：" << endl;
-//			cout << "请选择：";
-//			cin >> inputIsDigit;
-//			isDigit(inputIsDigit);
-//		}
-//		else {
-//			return 0;
-//		}
-//	}
-//}
-
 void MenuStateMachine::printItemsMessage(Item items) {
+	cout << endl;
 	cout << items.message << endl;
 }
 
 void MenuStateMachine::Run() {
 
-	while (keepRunning)
+	while (!gameData->gameOver)
 	{
 		switch (currentMenu)
 		{
@@ -212,6 +190,7 @@ void MenuStateMachine::Run() {
 			cout << "暂未开放新界面";
 
 		}
+		
 	}
 }
 

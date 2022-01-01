@@ -13,5 +13,6 @@ public:
 	void moveTo(Location location);
 	void moveContainedItemsToBackpack(Item& addItem); 
 	void interactWithItem(Item toolItem, Item targetItem); 
+	void afterInspectItem(Item& inspectedItem);
 };
 
