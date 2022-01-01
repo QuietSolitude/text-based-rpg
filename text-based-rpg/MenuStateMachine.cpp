@@ -26,16 +26,13 @@ Menu MenuStateMachine::handleTopLevelMenu()
 	{
 	case 0:
 		return MENU_INSPECT;
-		break;
 	case 1:
 		return MENU_USEITEM;
-		break;
 	case 2:
 		return MENU_MOVE;
-		break;
 
 	default:
-		cout << "请更具选项的顺序输入数字序列";
+		return MENU_TOP_LEVEL;
 	}
 }
 
@@ -57,11 +54,6 @@ Menu MenuStateMachine::handleMoveMenu()
 	}
 	return MENU_TOP_LEVEL;
 }
-
-//Menu MenuStateMachine::displayItems()
-//{
-//	vector<Item>::size_type sz = gameData->items.size();
-//}
 
 Menu MenuStateMachine::handleInspectMenu()
 {

@@ -1,6 +1,5 @@
 #pragma once
 #include "GameData.h"
-#include "Place.h"
 #include "Location.h"
 #include <vector>
 #include "Item.h"

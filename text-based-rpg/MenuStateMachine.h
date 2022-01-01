@@ -1,8 +1,6 @@
 #pragma once
 #include "InteractionService.h"
-#include "Place.h"
 #include "GameData.h"
-#include <locale>
 
 enum Menu {
 	MENU_TOP_LEVEL,
@@ -26,9 +24,6 @@ public:
 	Menu useToItem();
 	int printChoiceList(string prompt, vector<string> choices, bool topLevel = false);
 	void printItemsMessage(Item items);
-	int isDigit(string str);
-
 
 	void Run();
 };
-
