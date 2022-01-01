@@ -13,20 +13,22 @@ MenuStateMachine::MenuStateMachine(InteractionService* interaction, GameData* ga
 
 }
 
-Menu MenuStateMachine::handleTopLevelMenu() {
+Menu MenuStateMachine::handleTopLevelMenu()
+{
 
 	vector<string> choiceString;
 	choiceString.push_back("查看");
-	choiceString.push_back("物品");
+	choiceString.push_back("使用物品");
 	choiceString.push_back("移动");
 	int input = printChoiceList("你想要做什么？", choiceString, true);
 
-	switch (input) {
+	switch (input) 
+	{
 	case 0:
 		return MENU_INSPECT;
 		break;
 	case 1:
-		cout << "待完成功能";
+		return MENU_USEITEM;
 		break;
 	case 2:
 		return MENU_MOVE;
@@ -37,7 +39,8 @@ Menu MenuStateMachine::handleTopLevelMenu() {
 	}
 }
 
-Menu MenuStateMachine::handleMoveMenu() {
+Menu MenuStateMachine::handleMoveMenu()
+{
 
 	vector<Location>::size_type sz = gameData->locations.size();
 	vector<string> locationString;
@@ -48,8 +51,9 @@ Menu MenuStateMachine::handleMoveMenu() {
 
 	int itemNumberOfBack = printChoiceList("你想要移动到哪里呢？", locationString);
 
-	if (itemNumberOfBack >= 0) {
-		interaction->MoveTo(gameData->locations[itemNumberOfBack]);
+	if (itemNumberOfBack >= 0) 
+	{
+		interaction->moveTo(gameData->locations[itemNumberOfBack]);
 	}
 	return MENU_TOP_LEVEL;
 }
@@ -90,7 +94,7 @@ Menu MenuStateMachine::handleInspectMenu()
 				cout << item->containedItems[i].name;
 				if (i == item->containedItems.size() - 1)
 				{
-					cout << "放到了背包里" << endl;
+					cout << "收了起来" << endl;
 				}
 				else if (i == item->containedItems.size() - 2)
 				{
@@ -102,11 +106,47 @@ Menu MenuStateMachine::handleInspectMenu()
 				}
 			}
 
-			interaction->MoveContainedItemsToBackpack(*item);
+			interaction->moveContainedItemsToBackpack(*item);
 
 		}
 
 	}
+
+	return MENU_TOP_LEVEL;
+}
+
+Menu MenuStateMachine::useToItem()
+{
+	vector<string> displayItemName;
+	for (unsigned i = 0; i < gameData->player.backpack.size(); i++)
+	{
+		displayItemName.push_back(gameData->player.backpack[i].name);
+	}
+	
+	int toolItemIndex = printChoiceList("你想使用什么物品？", displayItemName);
+	if (toolItemIndex < 0)
+	{
+		return MENU_TOP_LEVEL; 
+	}
+	
+	vector<string> itemsString;
+	vector<Item> items;
+	int playerLocation = gameData->player.locationID;
+	for (unsigned i = 0; i < gameData->items.size(); i++)
+	{
+		if (playerLocation == gameData->items[i].locationID) {
+			itemsString.push_back(gameData->items[i].name);
+			items.push_back((gameData->items[i]));
+		}
+	}
+
+	int targetItemIndex = printChoiceList("你想对什么物品使用" + displayItemName[toolItemIndex] + "？", itemsString);
+	if (targetItemIndex < 0)
+	{
+		return MENU_TOP_LEVEL;
+	}
+	
+	interaction->interactWithItem(gameData->player.backpack[toolItemIndex], items[targetItemIndex]);
 
 	return MENU_TOP_LEVEL;
 }
@@ -173,6 +213,9 @@ void MenuStateMachine::Run() {
 		case MENU_INSPECT:
 			currentMenu = handleInspectMenu();
 			break;
+		case MENU_USEITEM:
+			currentMenu = useToItem();
+			break; 
 		default:
 			cout << "暂未开放新界面";
 

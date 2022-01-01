@@ -3,6 +3,7 @@
 #include "Place.h"
 #include "Location.h"
 #include <vector>
+#include "Item.h"
 
 class InteractionService
 {
@@ -10,8 +11,8 @@ private:
 	GameData* gameData;
 public:
 	InteractionService(GameData* gameData);
-	void MoveTo(Location location);
-	void MoveContainedItemsToBackpack(Item& addItem); 
-	
+	void moveTo(Location location);
+	void moveContainedItemsToBackpack(Item& addItem); 
+	void interactWithItem(Item toolItem, Item targetItem); 
 };
 
